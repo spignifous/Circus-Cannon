@@ -15,17 +15,6 @@ public class PlayerIdleState : PlayerState
         if (Input.Touch)
         {
             Player.ChangeState(Player.MoveState);
-            Debug.Log("Touch");
-        }
-
-        if (Input.TouchPressed)
-        {
-            Debug.Log("Pressed");
-        }
-
-        if (Input.TouchReleased)
-        {
-            Debug.Log("Released");
         }
     }
 }

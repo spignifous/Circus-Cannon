@@ -5,28 +5,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 using Game.Pool;
-using UnityEngine.UIElements;
-using System.Drawing;
 
 public class Ball : MonoBehaviour, IPoolable<Bullet>
 {
     #region INSPECTOR VARIABLES
 
     [SerializeField] private Ball _ball;
-
     #endregion
 
     #region VARIABLES
 
     private ObjectPool<Bullet> _pool;
 
-    private int _life = 6;
-    private int _lifeInitial = 6;
+    private int _life = 30;
+    private int _lifeInitial = 30;
 
-    private int _size = 0;
+    private int _facing = 1;
+    private int _size = 3;
 
-    private float _gravityScale = 1f;
-    private float _gravityScaleTarget = 1f;
+    private float _gravityScale = .8f;
+    private float _gravityScaleTarget = .8f;
 
     #endregion
 
@@ -54,10 +52,6 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
     private void Start()
     {
         InitialMove();
-
-        SetLife(Random.Range(6, 97));
-        SetSize(Random.Range(0, 3));
-
         UpdateScale();
     }
 
@@ -77,6 +71,10 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
     {
         if (collision.collider)
         {
+            if (_rigidbody.velocity.y > 1f)
+            {
+                _rigidbody.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+            }
             _rigidbody.AddTorque(_rigidbody.velocity.x * -5f);
         }
     }
@@ -91,16 +89,18 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
 
         if (camera == null) return;
 
+        Vector3 direction = new Vector3(1f * _facing, 1.2f, 1f);
+        float force = 1f + Random.Range(0f, 2f);
+
         if (OutsideCamera())
         {
             _collider.isTrigger = true;
 
             _gravityScale = .1f;
             _gravityScaleTarget = _gravityScale;
-        }
 
-        Vector3 direction = (transform.position.x < camera.transform.position.x) ? new Vector3(1f, .8f): new Vector3(-1, .8f);
-        float force = 1f + Random.Range(0f, 2f);
+            direction = (transform.position.x < camera.transform.position.x) ? new Vector3(1f, .8f, 1f) : new Vector3(-1, .8f, 1f);
+        }
 
         _rigidbody.AddForce(direction * force, ForceMode2D.Impulse);
         _rigidbody.AddTorque(force * 20f);
@@ -110,6 +110,11 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
     {
         _gravityScale = Mathf.Lerp(_gravityScale, _gravityScaleTarget, .1f);
         _rigidbody.gravityScale = _gravityScale;
+    }
+
+    private void SetFacing(int facing)
+    {
+        _facing = facing;
     }
 
     private bool OutsideCamera()
@@ -151,7 +156,8 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
         {
             _life--;
         }
-        else
+
+        if (_life == 0)
         {
             ReturnToPool();
         }
@@ -171,17 +177,6 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
         _size = size;
     }
 
-    private void SizeDown()
-    {
-        if (_size > 0)
-        {
-            _size--;
-        }
-        else 
-        {
-            ///TODO: Destroy / Return to Pool
-        }
-    }
 
     private void UpdateScale()
     {
@@ -191,20 +186,20 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
         {
             default:
             case 0:
-                size = .7f;
+                size = .5f;
                 break;
             case 1:
-                size = 1;
+                size = .75f;
                 break;
             case 2:
-                size = 1.5f;
+                size = 1f;
                 break;
             case 3:
-                size = 2f;
+                size = 1.25f;
                 break;
         }
 
-        transform.localScale *= size;
+        transform.localScale = Vector3.one * size;
     }
 
     #endregion
@@ -214,27 +209,30 @@ public class Ball : MonoBehaviour, IPoolable<Bullet>
     public void ReturnToPool()
     {
         /// TODO: Destroy / Return to Pool and Create more balls
-        /// 
-        Destroy(this);
-
         if (_size > 0)
         {
-            Ball b;
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
+
+            int life = _lifeInitial / 2;
+            int size = _size - 1;
 
             position.x -= .5f;
             rotation.z -= .5f;
 
-            b = Instantiate(_ball, position, transform.rotation);
-            b.SetSize(_size - 1);
+            Ball b1 = Instantiate(_ball, position, transform.rotation);
+            b1.SetLife(life);
+            b1.SetSize(size);
 
             position.x += .5f;
             rotation.z += .5f;
 
-            b = Instantiate(_ball, position, transform.rotation);
-            b.SetSize(_size - 1);
+            Ball b2 = Instantiate(_ball, position, transform.rotation);
+            b2.SetLife(life);
+            b2.SetSize(size);
         }
+
+        Destroy(gameObject);
     }
 
     public void SetPool(ObjectPool<Bullet> pool)

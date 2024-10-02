@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3ceaa71d7ece78419d07b20373241d5, type: 3}
-  m_Name: Player Data
+  m_Script: {fileID: 11500000, guid: c9c2fe3746a2d6945926ce3fb224b63b, type: 3}
+  m_Name: Ball 2 Data
   m_EditorClassIdentifier: 
-  SpeedCannon: 10
-  Bullet: {fileID: 3411381143986149673, guid: e5114534dd3aa0e4c8b7a4507e7c4a50, type: 3}
-  FireRate: 0.1
-  BulletSpeed: 30
+  maxSpeed: 2.5
+  wallImpulse: 15
+  acceleration: 0.3
+  _jumpHeightMax: 7
+  _jumpTimeToApex: 1.5
