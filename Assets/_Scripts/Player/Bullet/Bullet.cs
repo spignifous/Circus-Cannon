@@ -33,6 +33,10 @@ public class Bullet : Unit
 
             /// Pull of the pool FX bullet impact
             UnitManager.Instance.PullBulletImpact(transform.position, Quaternion.identity);
+
+            // Audio play
+            AudioSystem.Instance.Play("Bullet Hit");
+            AudioSystem.Instance.Play("Bulet Pop Hit");
         }
     }
 

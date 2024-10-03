@@ -275,6 +275,11 @@ public class CircusBall : Unit
         // Pulling ExplosionFX from the pool]
         UnitManager.Instance.PullExplosion(transform.position, transform.rotation);
 
+        // Audio Play
+        AudioSystem.Instance.Play("Ball Pop");
+        AudioSystem.Instance.Play("Pop");
+        AudioSystem.Instance.Play("Poof");
+
         // Return to pool
         Disable();
     }

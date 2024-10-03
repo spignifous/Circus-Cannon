@@ -86,6 +86,9 @@ public class PlayerMoveState : PlayerState
             }
 
             _timerSpawnBullet = 0;
+
+            // Audio Play
+            AudioSystem.Instance.Play("Bullet");
         }
 
         _timerSpawnBullet += Time.deltaTime;

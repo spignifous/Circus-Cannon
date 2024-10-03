@@ -21,6 +21,12 @@ public class PlayerDieState : PlayerState
 
         // State Lose
         GameManager.Instance.ChangeState(GameManager.Instance.LoseState);
+
+        // Audio Play
+        AudioSystem.Instance.Play("Death");
+        AudioSystem.Instance.Play("Death Hit");
+        AudioSystem.Instance.Play("Ball Pop Death");
+        AudioSystem.Instance.Play("Bullet Pop Hit");
     }
 
     public override void DoChecks()

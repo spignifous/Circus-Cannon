@@ -38,6 +38,6 @@ public class FrameRateManager : StaticInstance<FrameRateManager>
     {
         string content = FPS();
 
-        GUILayout.Label($"<size=40>State: {content}</size>");
+        //GUILayout.Label($"<size=40>State: {content}</size>");
     }
 }
