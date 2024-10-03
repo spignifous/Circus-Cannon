@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.StateMachine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class Player : StateMachine
 {
@@ -10,16 +11,16 @@ public class Player : StateMachine
     [Header("Player Data")]
     [SerializeField] private PlayerData _data;
 
-    //public PlayerData Data { get => _data; }
+    //public PlayerData Data => _data;
 
     [Header("Player Input")]
     [SerializeField] private InputReader _input;
 
-    //public InputReader Input { get => _input; }
+    //public InputReader Input => _input; }
 
     [Header("Aim Pivot")]
     [SerializeField] private Transform _aimPivot;
-    public Transform AimPivot { get => _aimPivot; }
+    public Transform AimPivot => _aimPivot;
 
     #endregion
 
@@ -28,6 +29,7 @@ public class Player : StateMachine
 
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
+    public PlayerDieState DieState { get; private set; }
 
     #endregion
 
@@ -37,6 +39,7 @@ public class Player : StateMachine
     public Rigidbody2D Rigidbody { get; private set; }
     public BoxCollider2D BoxCollider { get; private set; } 
     public Animator Animator { get; private set; }
+    public PlayerWheel[] Wheel { get; private set; }
 
     #endregion
 
@@ -51,12 +54,23 @@ public class Player : StateMachine
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         Animator = GetComponentInChildren<Animator>();
 
+        Wheel = GetComponentsInChildren<PlayerWheel>();
+
         // States
         IdleState = new PlayerIdleState(this, _data, _input);
         MoveState = new PlayerMoveState(this, _data, _input);
+        DieState = new PlayerDieState(this, _data, _input);
 
         // Initial State
         SetInitialState(null, IdleState);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out CircusBall ball))
+        {
+            ChangeState(DieState);
+        }
     }
 
     #endregion

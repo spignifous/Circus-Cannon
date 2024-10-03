@@ -1,5 +1,5 @@
-using Game.StateMachine;
 using UnityEngine;
+using Game.StateMachine;
 
 /// <summary>
 /// Instância Estática

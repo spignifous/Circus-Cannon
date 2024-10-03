@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public class PlayerIdleState : PlayerState
 {
@@ -9,6 +8,8 @@ public class PlayerIdleState : PlayerState
     public override void OnUpdate()
     {
         base.OnUpdate();
+
+        if (GameManager.Instance.PlayerLocked) return;
 
         Player.MoveState.Move();
 

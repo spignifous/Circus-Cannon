@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5771686575325549866}
   - component: {fileID: 5469831499143651924}
   - component: {fileID: 3411381143986149673}
+  - component: {fileID: 8931874958203694646}
   m_Layer: 0
   m_Name: Cannon Bullet
   m_TagString: Untagged
@@ -72,10 +73,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 50e8a48470928444883279789246c80b, type: 3}
+  m_SortingLayerID: 1922112079
+  m_SortingLayer: -2
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 1661321144, guid: 50e8a48470928444883279789246c80b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -133,3 +134,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3faee2c9fd2f34892d9656153b16be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &8931874958203694646
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4079116094619029219}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5f5ed3e866c6371409a69ecf2c68c522, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

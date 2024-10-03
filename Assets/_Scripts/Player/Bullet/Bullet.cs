@@ -1,35 +1,38 @@
 using UnityEngine;
-using UnityEngine.Pool;
-using Game.Pool;
 
-public class Bullet : MonoBehaviour, IPoolable<Bullet>
+public class Bullet : Unit
 {
     private float _speed = 10f;
-    
-    private ObjectPool<Bullet> _pool;
+
 
     #region UNITY FUNCTIONS
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Move();
 
         // Return to the pool if the bullet leaves the screen
         if (OutsideCamera())
         {
-            ReturnToPool();
+            Disable();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent(out Ball ball))
+        if (collider.gameObject.TryGetComponent(out CircusBall ball))
         {
             ball.TakeHit();
-            ReturnToPool();
 
-            /// TODO: Add some impact effect here
+            // Increase score
+            GameManager.Instance.Data.Score(3);
+
+            // Return to pool
+            Disable();
+
+            /// Pull of the pool FX bullet impact
+            UnitManager.Instance.PullBulletImpact(transform.position, Quaternion.identity);
         }
     }
 
@@ -54,20 +57,6 @@ public class Bullet : MonoBehaviour, IPoolable<Bullet>
         float width = height * camera.aspect;
 
         return (transform.position.y > camera.transform.position.y + (height / 2f) + 1f);
-    }
-
-    #endregion
-
-    #region POOL FUNCTIONS
-
-    public void ReturnToPool()
-    {
-        _pool.Release(this);
-    }
-
-    public void SetPool(ObjectPool<Bullet> pool)
-    {
-        _pool = pool;
     }
 
     #endregion
