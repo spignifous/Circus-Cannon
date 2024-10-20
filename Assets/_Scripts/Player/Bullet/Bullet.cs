@@ -4,7 +4,6 @@ public class Bullet : Unit
 {
     private float _speed = 10f;
 
-
     #region UNITY FUNCTIONS
 
     // Update is called once per frame
@@ -28,15 +27,15 @@ public class Bullet : Unit
             // Increase score
             GameManager.Instance.Data.Score(3);
 
-            // Return to pool
-            Disable();
-
             /// Pull of the pool FX bullet impact
             UnitManager.Instance.PullBulletImpact(transform.position, Quaternion.identity);
 
             // Audio play
             AudioSystem.Instance.Play("Bullet Hit");
-            AudioSystem.Instance.Play("Bulet Pop Hit");
+            AudioSystem.Instance.Play("Bullet Pop Hit");
+
+            // Return to pool
+            Disable();
         }
     }
 

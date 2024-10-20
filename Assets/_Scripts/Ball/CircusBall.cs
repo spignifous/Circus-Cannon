@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CircusBall : Unit
 {
@@ -23,7 +24,9 @@ public class CircusBall : Unit
     private Vector3 _vector3;
 
     private int _facing = 1;
-    
+
+    private int _spriteIndex;
+
     private int _life = 6;
     private int _lifeInitial = 6;
 
@@ -57,7 +60,6 @@ public class CircusBall : Unit
         _textMeshPro = GetComponentInChildren<TextMeshPro>();
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         FacingStart();
@@ -75,8 +77,6 @@ public class CircusBall : Unit
         {
             HorizontalMovement();
         }
-
-        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -253,6 +253,8 @@ public class CircusBall : Unit
             int life = _lifeInitial / 2;
             int size = _size - 1;
 
+            life = Mathf.Clamp(_size, 1, _lifeInitial);
+
             CircusBall ball;
             int facing;
             float angle = 90f;
@@ -262,25 +264,25 @@ public class CircusBall : Unit
             {
                 facing = ( i == 0) ? -1 : 1;
 
-                ball = UnitManager.Instance.PullBall(transform.position, transform.rotation) as CircusBall;
+                ball = Manager.PullBall(transform.position, transform.rotation) as CircusBall;
 
                 ball.SetFacing(facing);
                 ball.SetLife(life);
                 ball.SetSize(size);
-                ball.SetSprite(GetRandomSpriteIndex());
+                ball.SetSprite(ball.GetRandomSpriteIndex());
                 ball.ApplyImpulse(7f, angle + (45f * facing));
             }
         }
 
         // Pulling ExplosionFX from the pool]
-        UnitManager.Instance.PullExplosion(transform.position, transform.rotation);
+        Manager.PullExplosion(transform.position, transform.rotation);
 
         // Audio Play
         AudioSystem.Instance.Play("Ball Pop");
         AudioSystem.Instance.Play("Pop");
         AudioSystem.Instance.Play("Poof");
 
-        // Return to pool
+        // return to the pool
         Disable();
     }
 
@@ -300,7 +302,7 @@ public class CircusBall : Unit
         {
             _life--;
         }
-
+        
         if (_life == 0)
         {
             Died();
@@ -332,20 +334,23 @@ public class CircusBall : Unit
         _data = _datas[index];
     }
 
-    private void SetSprite(int index)
+    public void SetSprite(int index)
     {
+        if (_sprites == null) return;
         if (index > _sprites.Length) return;
 
         _renderer.sprite = _sprites[index];
     }
+
     public int GetRandomSpriteIndex()
     {
         switch(_size)
         {
-            case 0: return Random.Range(0, 3);
-            case 1: return Random.Range(4, 7);
+            case 0: return Random.Range(0, 4);
+            case 1: return Random.Range(4, 8);
+            case 2: return Random.Range(8, 12);
             default:
-            case 2: return Random.Range(8, 11);
+            case 3: return Random.Range(12, 16);
         }
     }
 
@@ -357,7 +362,7 @@ public class CircusBall : Unit
         _facing = (transform.position.x < camera.transform.position.x) ? 1 : -1;
     }
 
-    private void SetFacing(int facing)
+    public void SetFacing(int facing)
     {
         _facing = facing;
     }

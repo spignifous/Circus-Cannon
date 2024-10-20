@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GameRunState : GameState
 {
-    private int _timeMultiplier = 1;
+    private int _difficultyMultiplier = 1;
     private int _life = 6;
     private int _size;
+    private int _sizeMax = 3;
 
     private Camera _camera;
     private Coroutine _coroutine;
@@ -24,9 +25,7 @@ public class GameRunState : GameState
     {
         base.OnEnter();
 
-        _timeMultiplier = 1;
-
-        //SpawnerBall();
+        _difficultyMultiplier = 1;
     }
 
     public override void DoChecks()
@@ -39,7 +38,7 @@ public class GameRunState : GameState
         base.OnUpdate();
 
         // Spawner Ball Manager
-        SpawnRules();
+        IncreaseDifficulty();
         SpawnerBalls();
     }
 
@@ -76,15 +75,19 @@ public class GameRunState : GameState
 
         if (ball == null) return;
 
+        _life = Random.Range(6, 9 + (1 * _difficultyMultiplier));
+        _size = Random.Range(0, (_difficultyMultiplier / 3));
+
+        _life = Mathf.Clamp(_life, 6, 100);
+        _size = Mathf.Clamp(_size, 0, _sizeMax);
+
         // Choose Data Index
         int dataIndex = (pointIndex == 0 || pointIndex == 1) ? 1 : 0;
-
-        // Choose Sprite Index
-        int spriteIndex = (pointIndex == 0 || pointIndex == 1) ? 1 : 0;
 
         ball.SetData(dataIndex);
         ball.SetLife(_life);
         ball.SetSize(_size);
+        ball.SetSprite(ball.GetRandomSpriteIndex());
         ball.ApplyForceStart();
     }
 
@@ -97,7 +100,7 @@ public class GameRunState : GameState
 
     private IEnumerator SpawnerBallCoroutine()
     {
-        float time = Mathf.Clamp(_timeMultiplier / 4f, 0f, 5f);
+        float time = Mathf.Clamp(_difficultyMultiplier / 10f, 0f, 7f);
 
         // wait for 1 second
         yield return new WaitForSeconds(.5f + time);
@@ -107,15 +110,11 @@ public class GameRunState : GameState
         _coroutine = null;
     }
 
-    private void SpawnRules()
+    private void IncreaseDifficulty()
     {
-        if (TimeReached(3f * _timeMultiplier))
+        if (TimeReached(3f * _difficultyMultiplier))
         {
-            _life = Random.Range(6, 6 * _timeMultiplier);
-            _size = Random.Range(0, _timeMultiplier);
-            _size = Mathf.Clamp(_size, 0, 2);
-
-            _timeMultiplier++;
+            _difficultyMultiplier++;
         }
     }
 

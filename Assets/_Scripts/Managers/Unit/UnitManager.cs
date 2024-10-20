@@ -159,14 +159,14 @@ public class UnitManager : StaticInstance<UnitManager>
 
     private void OnDestroy()
     {
-         Units.Clear();
+        /* Units.Clear();
         _ballUnits.Clear();
         _bulletUnits.Clear();
         _ballUnits.Clear();
 
         _bulletImpactUnits.Clear(); ;
         _fireRateUnits.Clear();
-        _explosionUnits.Clear();
+        _explosionUnits.Clear();*/
     }
 
     #endregion

@@ -13,11 +13,11 @@ public class Unit : StateMachine
 
     private ObjectPool<Unit> _pool;
 
-    private UnitManager _manager;
+    protected UnitManager Manager;
 
     public void InitializeUnit(UnitManager manager, ObjectPool<Unit> pool)
     {
-        _manager = manager;
+        Manager = manager;
         _pool = pool;
     }
 
