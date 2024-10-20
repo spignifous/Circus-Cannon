@@ -253,7 +253,7 @@ public class CircusBall : Unit
             int life = _lifeInitial / 2;
             int size = _size - 1;
 
-            life = Mathf.Clamp(_size, 1, _lifeInitial);
+            life = Mathf.Clamp(life, 1, _lifeInitial);
 
             CircusBall ball;
             int facing;
